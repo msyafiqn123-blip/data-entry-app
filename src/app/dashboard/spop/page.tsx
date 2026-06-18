@@ -537,7 +537,7 @@ export default function SpopPage() {
               <input type="date" required value={new Date().toISOString().split('T')[0]} readOnly className="w-full px-4 py-2 border border-[var(--border)] rounded bg-[var(--section-bg)] text-[var(--text-secondary)] cursor-not-allowed" />
             </div>
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[var(--text-primary)] mb-1">NIP Pendata <span className="text-red-500">*</span></label>
+              <label className="text-sm font-semibold text-[var(--text-primary)] mb-1">Petugas Pendata <span className="text-red-500">*</span></label>
               <input type="text" required value={nipPendata} readOnly className="w-full px-4 py-2 border border-[var(--border)] rounded bg-[var(--section-bg)] text-[var(--text-secondary)] cursor-not-allowed" />
             </div>
           </div>

@@ -1,0 +1,20 @@
+import fs from 'fs';
+import path from 'path';
+
+function searchInDir(dir, query) {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      searchInDir(fullPath, query);
+    } else if (fullPath.endsWith('.tsx') || fullPath.endsWith('.ts')) {
+      const content = fs.readFileSync(fullPath, 'utf8');
+      if (content.toLowerCase().includes(query.toLowerCase())) {
+        console.log(`Found in: ${fullPath}`);
+      }
+    }
+  }
+}
+
+searchInDir('./src', 'Petugas Pendata');

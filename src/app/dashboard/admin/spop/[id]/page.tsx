@@ -473,7 +473,7 @@ export default function EditSpopPage({ params }: { params: Promise<{ id: string 
           </div>
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             <div className="flex flex-col">
-              <label className="text-sm font-semibold text-[var(--text-primary)] mb-1">NIP Pendata</label>
+              <label className="text-sm font-semibold text-[var(--text-primary)] mb-1">Petugas Pendata</label>
               <input type="text" required value={nipPendata} onChange={e=>setNipPendata(e.target.value)} disabled className="w-full px-4 py-2 border border-[var(--border)] rounded focus:ring-2 focus:ring-purple-500 outline-none bg-[var(--section-bg)] text-[var(--text-secondary)] border-[var(--border)] cursor-not-allowed" />
             </div>
           </div>

@@ -18,30 +18,43 @@ export async function GET(req: Request) {
 
   const wilayahList = await prisma.wilayah.findMany();
   
-  const allSpop = await prisma.spopData.findMany({
-    include: {
-      user: {
-        select: { kodeKecamatan: true, kodeKelurahan: true }
-      }
-    }
+  const spopGroupedByKecKel = await prisma.spopData.groupBy({
+    by: ['nop'],
+    _count: { nop: true },
+  });
+
+  const spopVerifiedGrouped = await prisma.spopData.groupBy({
+    by: ['nop'],
+    where: { isVerified: true },
+    _count: { nop: true },
   });
 
   const regions = wilayahList.map(w => {
-    const spopInRegion = allSpop.filter(s => {
-      const parts = s.nop.split('.');
-      if (parts.length >= 4) {
-        return parts[2] === w.kodeKecamatan && parts[3] === w.kodeKelurahan;
+    // Count SPOP that belongs to this wilayah based on NOP (parts[2] === kodeKecamatan, parts[3] === kodeKelurahan)
+    let totalInput = 0;
+    let totalVerified = 0;
+
+    spopGroupedByKecKel.forEach(group => {
+      const parts = group.nop.split('.');
+      if (parts.length >= 4 && parts[2] === w.kodeKecamatan && parts[3] === w.kodeKelurahan) {
+        totalInput += group._count.nop;
       }
-      return s.user?.kodeKecamatan === w.kodeKecamatan && s.user?.kodeKelurahan === w.kodeKelurahan;
     });
-    
+
+    spopVerifiedGrouped.forEach(group => {
+      const parts = group.nop.split('.');
+      if (parts.length >= 4 && parts[2] === w.kodeKecamatan && parts[3] === w.kodeKelurahan) {
+        totalVerified += group._count.nop;
+      }
+    });
+
     return {
       kodeKecamatan: w.kodeKecamatan,
       kodeKelurahan: w.kodeKelurahan,
       kecamatan: w.namaKecamatan,
       kelurahan: w.namaKelurahan,
-      totalInput: spopInRegion.length,
-      totalVerified: spopInRegion.filter(s => s.isVerified).length
+      totalInput,
+      totalVerified
     };
   }).sort((a, b) => b.totalInput - a.totalInput);
 

@@ -27,10 +27,8 @@ export default function DashboardPage() {
     if (isAdmin) {
       Promise.all([
         fetch("/api/users").then(res => res.ok ? res.json() : []),
-        fetch("/api/admin/spop").then(res => res.ok ? res.json() : []),
-        fetch("/api/admin/lspop").then(res => res.ok ? res.json() : []),
         fetch("/api/dashboard/summary").then(res => res.ok ? res.json() : []),
-      ]).then(([users, spop, lspop, summaryData]) => {
+      ]).then(([users, summaryData]) => {
         setStats({
           users: Array.isArray(users) ? users.length : 0,
           spop: summaryData?.totalSpop || 0,
@@ -45,12 +43,12 @@ export default function DashboardPage() {
         setLoading(false);
       });
     } else {
-      // For Pendata
+      // For Pendata & Verifikator
       Promise.all([
-        fetch("/api/spop").then(res => res.ok ? res.json() : []),
-        fetch("/api/lspop").then(res => res.ok ? res.json() : []),
         fetch("/api/dashboard/summary").then(res => res.ok ? res.json() : []),
-      ]).then(([spop, lspop, summaryData]) => {
+        fetch("/api/spop").then(res => res.ok ? res.json() : []),
+        fetch("/api/lspop").then(res => res.ok ? res.json() : [])
+      ]).then(([summaryData, spop, lspop]) => {
         const mySpopData = Array.isArray(spop) ? spop.filter((s:any) => s.userId === session?.user?.id) : [];
         const myLspopData = Array.isArray(lspop) ? lspop.filter((l:any) => l.userId === session?.user?.id) : [];
         
@@ -59,12 +57,7 @@ export default function DashboardPage() {
         let spopVerifiedCount = mySpopData.filter((s:any) => s.isVerified).length;
         let lspopVerifiedCount = myLspopData.filter((s:any) => s.isVerified).length;
 
-        if (isAdmin) {
-          spopCount = Array.isArray(spop) ? spop.length : 0;
-          lspopCount = Array.isArray(lspop) ? lspop.length : 0;
-          spopVerifiedCount = Array.isArray(spop) ? spop.filter((s:any) => s.isVerified).length : 0;
-          lspopVerifiedCount = Array.isArray(lspop) ? lspop.filter((s:any) => s.isVerified).length : 0;
-        } else if (isVerifikator) {
+        if (isVerifikator) {
           spopCount = Array.isArray(spop) ? spop.filter((s:any) => !s.isVerified).length : 0;
           lspopCount = Array.isArray(lspop) ? lspop.filter((s:any) => !s.isVerified).length : 0;
           spopVerifiedCount = Array.isArray(spop) ? spop.filter((s:any) => s.verifiedBy === session?.user?.username).length : 0;
@@ -87,7 +80,7 @@ export default function DashboardPage() {
         setLoading(false);
       });
     }
-  }, [status, isAdmin, session?.user?.id]);
+  }, [status, isAdmin, isVerifikator, session?.user?.id, session?.user?.username]);
 
   if (loading || status === "loading") {
     return <div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin text-[#00557e]" /></div>;

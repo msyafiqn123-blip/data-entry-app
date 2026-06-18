@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      String   @default("PENDATA") // "ADMIN" or "PENDATA"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // NOP automation
+  kodeKecamatan String?
+  namaKecamatan String?
+  kodeKelurahan String?
+  namaKelurahan String?
+
+  spopData  SpopData[]
+  lspopData LspopData[]
+
+  submissions FormSubmission[]
+}
+
+model Wilayah {
+  id            String @id @default(uuid())
+  kodeKecamatan String
+  namaKecamatan String
+  kodeKelurahan String
+  namaKelurahan String
+
+  @@unique([kodeKecamatan, kodeKelurahan])
+}
+
+model SpopData {
+  id             String   @id @default(uuid())
+  nop            String   @unique
+  // Data Pendataan SPOP
+  noFormulir     String
+  jenisTransaksi String   @default("Perekaman Data Baru")
+  isPecah        Boolean  @default(false)
+  nopAsal        String?
+  // Data Subjek Pajak
+  noKtp          String?
+  kelurahanWp    String?
+  namaWp         String
+  statusWp       String?
+  npwp           String?
+  jalanWp        String?
+  pekerjaan      String?
+  telepon        String?
+  rtRwWp         String?
+  noHp           String?
+  dati2          String?
+  blokKavNoWp    String?
+  kodePosWp      String?
+
+  // Data Letak Objek Pajak
+  noPersil       String?
+  blokKavNoOp    String?
+  rtRwOp         String?
+  jalanOp        String
+  statusCabang   String?
+
+  // Data Bumi
+  luasBumi       Float
+  kodeZnt        String?
+  jenisBumi      String?
+  jenisTanah     String?
+  jenisSurat     String?
+  keteranganBumi String?
+  keteranganBphtb String?
+
+  kelasBumi      String? // Legacy / kept for compatibility if needed
+
+  // Pendata
+  nipPendata     String?
+  
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+
+  // Verification
+  isVerified     Boolean  @default(false)
+  status         String   @default("MENUNGGU") // "MENUNGGU", "TERVERIFIKASI", "PERLU_PERBAIKAN"
+  catatanVerifikasi String?
+  verifiedAt     DateTime?
+  verifiedBy     String?
+
+  // Coordinates
+  latitude       String?
+  longitude      String?
+
+  lspops         LspopData[]
+}
+
+model LspopData {
+  id             String   @id @default(uuid())
+  spopId         String?
+  spop           SpopData? @relation(fields: [spopId], references: [id])
+  nop            String   @default("")
+  noFormulir     String?
+  noBangunan     Int
+  jenisBangunan  String
+  luasBangunan   Float
+  jumlahLantai   Int
+  tahunDibangun  Int
+  kondisiBangunan String
+  konstruksi     String
+  atap           String?
+  dinding        String?
+  lantai         String?
+  langitLangit   String?
+  dayaListrik    String?
+  tahunRenovasi  Int?
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+
+  // Verification
+  isVerified     Boolean  @default(false)
+  status         String   @default("MENUNGGU") // "MENUNGGU", "TERVERIFIKASI", "PERLU_PERBAIKAN"
+  catatanVerifikasi String?
+  verifiedAt     DateTime?
+  verifiedBy     String?
+}
+
+model Form {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  fields      FormField[]
+  submissions FormSubmission[]
+}
+
+model FormField {
+  id          String   @id @default(uuid())
+  formId      String
+  form        Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  label       String
+  type        String   // "TEXT", "NUMBER", "SELECT", "RADIO"
+  options     String?  // JSON stringified array of options if applicable
+  required    Boolean  @default(false)
+  order       Int      @default(0)
+
+  answers     FormAnswer[]
+}
+
+model FormSubmission {
+  id        String   @id @default(uuid())
+  formId    String
+  form        Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  answers   FormAnswer[]
+}
+
+model FormAnswer {
+  id           String   @id @default(uuid())
+  submissionId String
+  submission   FormSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  fieldId      String
+  field        FormField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  value        String   // Stored as string, parsed based on field type
+}

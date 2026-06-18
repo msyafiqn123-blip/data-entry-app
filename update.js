@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient(); prisma.user.updateMany({where: {role: 'INPUTTER'}, data: {role: 'PENDATA'}}).then(r => console.log('Updated', r.count)).catch(e => console.error(e)).finally(() => prisma.$disconnect());

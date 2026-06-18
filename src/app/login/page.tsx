@@ -39,7 +39,7 @@ export default function LoginPage() {
 
       <div className="relative z-10 w-full max-w-md p-8 bg-white rounded-3xl shadow-xl border border-slate-200 m-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">DataEntry</h1>
+          <h1 className="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">PendanilApp</h1>
           <p className="text-slate-500 font-medium">Silakan masuk ke akun Anda</p>
         </div>
 
@@ -71,7 +71,7 @@ export default function LoginPage() {
             <div className="flex justify-between items-center mb-2">
               <label className="block text-slate-700 text-sm font-semibold">Password</label>
               <a 
-                href="https://wa.me/6285156123059?text=Halo%20Admin,%20saya%20lupa%20password%20akun%20DataEntry%20saya" 
+                href="https://wa.me/6285156123059?text=Halo%20Admin,%20saya%20lupa%20password%20akun%20PendanilApp%20saya" 
                 target="_blank" 
                 rel="noreferrer"
                 className="text-xs text-[#00557e] hover:text-[#00334c] font-medium transition-colors"
@@ -106,7 +106,7 @@ export default function LoginPage() {
             <div className="mt-6 pt-6 border-t border-slate-200">
               <p className="text-center text-sm text-slate-500 mb-3">Masih kesulitan masuk?</p>
               <a 
-                href="https://wa.me/6285156123059?text=Halo%20Admin,%20saya%20butuh%20bantuan%20terkait%20aplikasi%20DataEntry" 
+                href="https://wa.me/6285156123059?text=Halo%20Admin,%20saya%20butuh%20bantuan%20terkait%20aplikasi%20PendanilApp" 
                 target="_blank" 
                 rel="noreferrer"
                 className="flex items-center justify-center w-full py-3 px-4 bg-green-500 text-white font-bold rounded-xl shadow-md hover:bg-green-600 transition-all transform hover:-translate-y-0.5"

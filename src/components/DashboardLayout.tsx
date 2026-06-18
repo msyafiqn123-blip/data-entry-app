@@ -41,7 +41,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <aside className={`fixed inset-y-0 left-0 bg-[var(--sidebar-bg)] border-r border-[var(--border)] w-64 transform transition-transform duration-300 ease-in-out z-20 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:relative md:translate-x-0 backdrop-blur-xl`}>
         <div className="h-full flex flex-col">
           <div className="p-6 border-b border-[var(--border)] flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-amber-500">DataEntry</h1>
+            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-amber-500">PendanilApp</h1>
             <ThemeToggle />
           </div>
           
@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-amber-500 md:hidden">DataEntry</h2>
+            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-amber-500 md:hidden">PendanilApp</h2>
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <span className="text-sm font-medium hidden md:block text-[var(--text-primary)]">{session?.user?.username}</span>

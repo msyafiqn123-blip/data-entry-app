@@ -24,8 +24,11 @@ export async function GET() {
     }
   });
 
-  let { kodeKecamatan, kodeKelurahan } = user;
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
 
+  let { kodeKecamatan, kodeKelurahan } = user;
   // Fallback for older accounts where kode wasn't saved in DB
   if (!kodeKecamatan && user.username.toLowerCase() === "ciseureuh") {
     kodeKecamatan = "080";

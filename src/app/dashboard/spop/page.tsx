@@ -75,8 +75,8 @@ export default function SpopPage() {
   // Data Bumi
   const [luasBumi, setLuasBumi] = useState("");
   const [kodeZnt, setKodeZnt] = useState("");
-  const [jenisBumi, setJenisBumi] = useState("TANAH + BANGUNAN");
-  const [jenisTanah, setJenisTanah] = useState("TANAH + BANGUNAN");
+  const [jenisBumi, setJenisBumi] = useState("TANAH KOSONG");
+  const [jenisTanah, setJenisTanah] = useState("TANAH KOSONG");
   const [jenisSuratOption, setJenisSuratOption] = useState("PILIH");
   const [jenisSurat, setJenisSurat] = useState("");
   const [keteranganBumi, setKeteranganBumi] = useState("");
